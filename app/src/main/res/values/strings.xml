@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MovieTrotter</string>
+    <string name="no_network_pull_down_refresh">No internet connection. Please reconnect and pull down to refresh.</string>
 </resources>
