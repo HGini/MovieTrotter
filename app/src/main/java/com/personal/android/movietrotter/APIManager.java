@@ -37,7 +37,7 @@ public class APIManager {
         this.context = context;
     }
 
-    public void getMoviesData() {
+    public void getPopularMoviesData() {
         if (Utils.isNetworkConnected(context)) {
             Request request = new Request.Builder()
                     .url(URL_POPULAR_MOVIES)
@@ -47,12 +47,39 @@ public class APIManager {
             okHttpClient.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    Log.e(TAG, "getMoviesData: onFailure");
+                    Log.e(TAG, "getPopularMoviesData: onFailure");
                 }
 
                 @Override
                 public void onResponse(Response response) throws IOException {
-                    Log.v(TAG, "getMoviesData: onResponse");
+                    Log.v(TAG, "getPopularMoviesData: onResponse");
+                    parseAndSaveMoviesData(response);
+                }
+            });
+
+        }
+        else {
+            Toast.makeText(context, context.getString(R.string.no_network_pull_down_refresh),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void getTopRatedMoviesData() {
+        if (Utils.isNetworkConnected(context)) {
+            Request request = new Request.Builder()
+                    .url(URL_TOP_RATED_MOVIES)
+                    .get()
+                    .build();
+            OkHttpClient okHttpClient = new OkHttpClient();
+            okHttpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    Log.e(TAG, "getPopularMoviesData: onFailure");
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    Log.v(TAG, "getPopularMoviesData: onResponse");
                     parseAndSaveMoviesData(response);
                 }
             });

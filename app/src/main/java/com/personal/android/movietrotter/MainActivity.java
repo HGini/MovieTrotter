@@ -11,6 +11,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         APIManager apiManager = new APIManager(this);
-        apiManager.getMoviesData();
+        apiManager.getPopularMoviesData();
     }
 }
