@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MovieTrotter</string>
+    <string name="actionbar_title_pop">Popular</string>
+    <string name="actionbar_title_top_rated">Top Rated</string>
+    <string name="actionbar_title_detail">Movie Detail</string>
     <string name="no_network_pull_down_refresh">No internet connection. Please reconnect and pull down to refresh.</string>
 </resources>

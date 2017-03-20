@@ -25,6 +25,7 @@ public class APIManager {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String URL_POPULAR_MOVIES = "http://api.themoviedb.org/3/movie/popular?api_key=" + APIKeys.KEY_VER3_AUTH;
     private static final String URL_TOP_RATED_MOVIES = "http://api.themoviedb.org/3/movie/top_rated?api_key=" + APIKeys.KEY_VER3_AUTH;
+    public static final String URL_BASE_MOVIE_IMAGE = "http://image.tmdb.org/t/p/w185";
     private static final String RESPONSE_JSON_KEY_PAGE = "page";
     private static final String RESPONSE_JSON_KEY_RESULTS = "results";
     private static final String RESPONSE_JSON_KEY_TOTAL_RESULTS = "total_results";
@@ -37,7 +38,7 @@ public class APIManager {
         this.context = context;
     }
 
-    public void getPopularMoviesData() {
+    public void getPopularMoviesData(final MoviesInterface moviesInterface) {
         if (Utils.isNetworkConnected(context)) {
             Request request = new Request.Builder()
                     .url(URL_POPULAR_MOVIES)
@@ -53,7 +54,7 @@ public class APIManager {
                 @Override
                 public void onResponse(Response response) throws IOException {
                     Log.v(TAG, "getPopularMoviesData: onResponse");
-                    parseAndSaveMoviesData(response);
+                    moviesInterface.onAPISuccess(parseMoviesData(response));
                 }
             });
 
@@ -64,7 +65,7 @@ public class APIManager {
         }
     }
 
-    public void getTopRatedMoviesData() {
+    public void getTopRatedMoviesData(final MoviesInterface moviesInterface) {
         if (Utils.isNetworkConnected(context)) {
             Request request = new Request.Builder()
                     .url(URL_TOP_RATED_MOVIES)
@@ -80,7 +81,7 @@ public class APIManager {
                 @Override
                 public void onResponse(Response response) throws IOException {
                     Log.v(TAG, "getPopularMoviesData: onResponse");
-                    parseAndSaveMoviesData(response);
+                    moviesInterface.onAPISuccess(parseMoviesData(response));
                 }
             });
 
@@ -91,12 +92,12 @@ public class APIManager {
         }
     }
 
-    private void parseAndSaveMoviesData(Response response) {
+    private ArrayList<Movie> parseMoviesData(Response response) {
+        ArrayList<Movie> movies = new ArrayList<>();
         if (response != null) {
             try {
                 JSONObject responseBody = new JSONObject(response.body().string());
                 JSONArray moviesArray = responseBody.getJSONArray(RESPONSE_JSON_KEY_RESULTS);
-                ArrayList<Movie> movies = new ArrayList<>();
                 for (int i = 0; i < moviesArray.length(); i++) {
                     JSONObject movieObj = moviesArray.getJSONObject(i);
                     Movie movie = new Movie();
@@ -137,5 +138,6 @@ public class APIManager {
                 ex.printStackTrace();
             }
         }
+        return movies;
     }
 }
