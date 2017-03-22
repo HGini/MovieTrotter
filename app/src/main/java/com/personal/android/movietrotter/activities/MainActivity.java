@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.personal.android.movietrotter.beans.Trailer;
 import com.personal.android.movietrotter.zextras.APIManager;
 import com.personal.android.movietrotter.beans.Movie;
 import com.personal.android.movietrotter.adapters.MoviesAdapter;
@@ -17,7 +18,7 @@ import com.personal.android.movietrotter.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoviesInterface{
 
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
@@ -71,18 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Make the API call
         APIManager apiManager = new APIManager(this);
-        apiManager.getPopularMoviesData(new MoviesInterface() {
-            @Override
-            public void onAPISuccess(final ArrayList<Movie> movies) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.setData(movies);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
+        apiManager.getPopularMoviesData(this);
     }
 
     private void sortByTopRated() {
@@ -93,17 +83,27 @@ public class MainActivity extends AppCompatActivity {
 
         // Make the API call
         APIManager apiManager = new APIManager(this);
-        apiManager.getTopRatedMoviesData(new MoviesInterface() {
+        apiManager.getTopRatedMoviesData(this);
+    }
+
+    @Override
+    public void onMoviesAPISuccess(final ArrayList<Movie> movies) {
+        runOnUiThread(new Runnable() {
             @Override
-            public void onAPISuccess(final ArrayList<Movie> movies) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.setData(movies);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+            public void run() {
+                adapter.setData(movies);
+                adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onMovieTrailersAPISuccess(ArrayList<Trailer> trailers) {
+
+    }
+
+    @Override
+    public void onMovieReviewsAPISuccess(ArrayList<String> reviews) {
+
     }
 }

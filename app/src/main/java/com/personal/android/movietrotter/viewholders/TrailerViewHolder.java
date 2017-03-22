@@ -10,7 +10,7 @@ import com.personal.android.movietrotter.R;
  * Created by Hemangini on 3/22/17.
  */
 
-public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class TrailerViewHolder extends BaseViewHolder implements View.OnClickListener{
 
     public TextView titleTextView;
     public OnItemClickedListener onItemClickedListener;
@@ -27,9 +27,5 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.O
     public void onClick(View v) {
         if (onItemClickedListener != null)
             onItemClickedListener.onItemClicked(getAdapterPosition());
-    }
-
-    public interface OnItemClickedListener {
-        void onItemClicked(int position);
     }
 }

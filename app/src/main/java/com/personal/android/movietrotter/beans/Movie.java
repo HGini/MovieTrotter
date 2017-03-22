@@ -1,10 +1,13 @@
 package com.personal.android.movietrotter.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Hemangini on 3/17/17.
  */
 
-public class Movie {
+public class Movie implements Parcelable{
 
     public static final String JSON_KEY_POSTER_PATH = "poster_path";
     public static final String JSON_KEY_ADULT = "adult";
@@ -35,6 +38,62 @@ public class Movie {
     private String originalLang;
     private String title;
     private String backdropPath;
+
+    public Movie() {}
+
+    public Movie(Parcel in) {
+        this.id = in.readInt();
+        this.voteCount = in.readInt();
+        this.voteAverage = in.readDouble();
+        this.popularity = in.readDouble();
+        this.isAdult = (in.readByte() == 1);
+        this.isVideo = (in.readByte() == 1);
+        this.posterPath = in.readString();
+        this.overview = in.readString();
+        this.releaseDate = in.readString();
+        this.genreIDs = in.readString();
+        this.originalTitle = in.readString();
+        this.originalLang = in.readString();
+        this.title = in.readString();
+        this.backdropPath = in.readString();
+    }
+
+    public static Parcelable.Creator<Movie> CREATOR =
+            new Parcelable.Creator<Movie>() {
+
+                @Override
+                public Movie createFromParcel(Parcel source) {
+                    return new Movie(source);
+                }
+
+                @Override
+                public Movie[] newArray(int size) {
+                    return new Movie[size];
+                }
+            };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(voteCount);
+        dest.writeDouble(voteAverage);
+        dest.writeDouble(popularity);
+        dest.writeByte((byte) (isAdult ? 1 : 0));
+        dest.writeByte((byte) (isVideo ? 1 : 0));
+        dest.writeString(posterPath);
+        dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeString(genreIDs);
+        dest.writeString(originalTitle);
+        dest.writeString(originalLang);
+        dest.writeString(title);
+        dest.writeString(backdropPath);
+    }
 
     public int getId() {
         return id;

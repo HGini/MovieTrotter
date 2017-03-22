@@ -6,15 +6,27 @@ package com.personal.android.movietrotter.beans;
 
 public class Trailer {
 
-    private String title;
+    private String id;
+    private String name;
     private String videoUrl;
 
-    public String getTitle() {
-        return title;
+    public static final String API_KEY_ID = "id";
+    public static final String API_KEY_NAME = "name";
+
+    public String getId() {
+        return id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getVideoUrl() {

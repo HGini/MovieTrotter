@@ -1,11 +1,14 @@
 package com.personal.android.movietrotter.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.personal.android.movietrotter.activities.DetailsActivity;
+import com.personal.android.movietrotter.viewholders.BaseViewHolder;
 import com.personal.android.movietrotter.zextras.APIManager;
 import com.personal.android.movietrotter.viewholders.MovieViewHolder;
 import com.personal.android.movietrotter.R;
@@ -17,7 +20,7 @@ import java.util.ArrayList;
  * Created by Hemangini on 3/19/17.
  */
 
-public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> implements BaseViewHolder.OnItemClickedListener{
 
     private Context context;
     private ArrayList<Movie> movies = new ArrayList<>();
@@ -33,7 +36,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.grid_item_movie, parent, false);
-        return new MovieViewHolder(view);
+        return new MovieViewHolder(view, this);
     }
 
     @Override
@@ -45,5 +48,17 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        Movie movie = movies.get(position);
+        openMovieDetailsActivity(movie);
+    }
+
+    private void openMovieDetailsActivity(Movie movie) {
+        Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra(DetailsActivity.INTENT_EXTRAS_KEY_MOVIE, movie);
+        context.startActivity(intent);
     }
 }

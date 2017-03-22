@@ -10,13 +10,22 @@ import com.personal.android.movietrotter.R;
  * Created by Hemangini on 3/19/17.
  */
 
-public class MovieViewHolder extends RecyclerView.ViewHolder {
+public class MovieViewHolder extends BaseViewHolder implements View.OnClickListener{
 
     public ImageView imageView;
+    public OnItemClickedListener onItemClickedListener;
 
-    public MovieViewHolder(View itemView) {
+    public MovieViewHolder(View itemView, OnItemClickedListener onItemClickedListener) {
         super(itemView);
+        itemView.setOnClickListener(this);
+        this.onItemClickedListener = onItemClickedListener;
 
         imageView = (ImageView) itemView.findViewById(R.id.imageView);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (onItemClickedListener != null)
+            onItemClickedListener.onItemClicked(getAdapterPosition());
     }
 }
