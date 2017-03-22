@@ -1,8 +1,10 @@
-package com.personal.android.movietrotter;
+package com.personal.android.movietrotter.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import com.personal.android.movietrotter.R;
 
 /**
  * Created by Hemangini on 3/20/17.

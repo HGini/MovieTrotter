@@ -1,4 +1,6 @@
-package com.personal.android.movietrotter;
+package com.personal.android.movietrotter.interfaces;
+
+import com.personal.android.movietrotter.beans.Movie;
 
 import java.util.ArrayList;
 

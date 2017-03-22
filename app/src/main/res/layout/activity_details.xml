@@ -48,8 +48,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:padding="20dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
@@ -142,5 +141,11 @@
             tools:text="MARK AS FAVORITE" />
 
     </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/trailers_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"></android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

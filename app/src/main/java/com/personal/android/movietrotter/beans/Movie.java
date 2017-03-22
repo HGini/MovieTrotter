@@ -1,4 +1,4 @@
-package com.personal.android.movietrotter;
+package com.personal.android.movietrotter.beans;
 
 /**
  * Created by Hemangini on 3/17/17.

@@ -1,4 +1,4 @@
-package com.personal.android.movietrotter;
+package com.personal.android.movietrotter.zextras;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

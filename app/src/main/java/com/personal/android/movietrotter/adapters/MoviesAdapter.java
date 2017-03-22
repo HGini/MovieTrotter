@@ -1,10 +1,15 @@
-package com.personal.android.movietrotter;
+package com.personal.android.movietrotter.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.personal.android.movietrotter.zextras.APIManager;
+import com.personal.android.movietrotter.viewholders.MovieViewHolder;
+import com.personal.android.movietrotter.R;
+import com.personal.android.movietrotter.beans.Movie;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
@@ -17,7 +22,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     private Context context;
     private ArrayList<Movie> movies = new ArrayList<>();
 
-    MoviesAdapter(Context context) {
+    public MoviesAdapter(Context context) {
         this.context = context;
     }
 
@@ -27,7 +32,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.movie_tile, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.grid_item_movie, parent, false);
         return new MovieViewHolder(view);
     }
 

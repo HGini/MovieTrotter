@@ -1,4 +1,4 @@
-package com.personal.android.movietrotter;
+package com.personal.android.movietrotter.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.personal.android.movietrotter.zextras.APIManager;
+import com.personal.android.movietrotter.beans.Movie;
+import com.personal.android.movietrotter.adapters.MoviesAdapter;
+import com.personal.android.movietrotter.interfaces.MoviesInterface;
+import com.personal.android.movietrotter.R;
 
 import java.util.ArrayList;
 

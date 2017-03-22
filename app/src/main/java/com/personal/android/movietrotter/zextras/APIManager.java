@@ -1,8 +1,12 @@
-package com.personal.android.movietrotter;
+package com.personal.android.movietrotter.zextras;
 
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.personal.android.movietrotter.R;
+import com.personal.android.movietrotter.beans.Movie;
+import com.personal.android.movietrotter.interfaces.MoviesInterface;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
