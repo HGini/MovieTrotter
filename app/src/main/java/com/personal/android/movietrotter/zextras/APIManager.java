@@ -185,6 +185,14 @@ public class APIManager {
                 JSONObject body = new JSONObject(response.body().string());
                 if (body.has(RESPONSE_JSON_KEY_RESULTS)) {
                     JSONArray array = body.getJSONArray(RESPONSE_JSON_KEY_RESULTS);
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject jsonObject = array.getJSONObject(i);
+                        Trailer trailer = new Trailer();
+                        if (jsonObject.has(Trailer.API_KEY_NAME))
+                            trailer.setName(jsonObject.getString(Trailer.API_KEY_NAME));
+
+                        trailers.add(trailer);
+                    }
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();

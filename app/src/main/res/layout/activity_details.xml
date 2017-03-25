@@ -92,25 +92,50 @@
                 android:textColor="@android:color/white"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                tools:text="MARK AS FAVORITE" />
+                android:text="MARK AS FAVORITE" />
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/trailers_recyclerview"
-            android:layout_below="@+id/synopsis"
+        <TextView
+            android:id="@+id/trailers_heading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_below="@+id/synopsis"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:textStyle="bold"
+            android:text="Trailers"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trailers_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/trailers_heading"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
             android:padding="10dp"></android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/review_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/trailers_recyclerview"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:text="Reviews"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reviews_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/trailers_recyclerview"
-            android:padding="10dp"></android.support.v7.widget.RecyclerView>
+            android:layout_below="@+id/review_heading"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="#8abeb6"></android.support.v7.widget.RecyclerView>
 
     </RelativeLayout>
 
