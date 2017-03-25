@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.personal.android.movietrotter.R;
@@ -37,6 +39,10 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView synopsisTextView;
     private ImageView posterImageView;
     private TextView favoriteButton;
+    private TextView trailersHeader;
+    private TextView reviewsHeader;
+    private ProgressBar reviewsProgressBar;
+    private ProgressBar trailersProgressBar;
     private RecyclerView reviewsRecyclerview;
     private RecyclerView trailersRecyclerview;
 
@@ -69,6 +75,8 @@ public class DetailsActivity extends AppCompatActivity {
         synopsisTextView = (TextView) findViewById(R.id.synopsis);
         posterImageView = (ImageView) findViewById(R.id.poster_image);
         favoriteButton = (TextView) findViewById(R.id.fav_button);
+        trailersProgressBar = (ProgressBar) findViewById(R.id.trailers_progress);
+        trailersHeader = (TextView) findViewById(R.id.trailers_heading);
         trailersRecyclerview = (RecyclerView) findViewById(R.id.trailers_recyclerview);
         trailersRecyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false){
             @Override
@@ -76,6 +84,8 @@ public class DetailsActivity extends AppCompatActivity {
                 return false;
             }
         });
+        reviewsProgressBar = (ProgressBar) findViewById(R.id.reviews_progress);
+        reviewsHeader = (TextView) findViewById(R.id.review_heading);
         reviewsRecyclerview = (RecyclerView) findViewById(R.id.reviews_recyclerview);
         reviewsRecyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false){
             @Override
@@ -111,10 +121,6 @@ public class DetailsActivity extends AppCompatActivity {
             }
         }
 
-        if (getActionBar() != null) {
-            getActionBar().setTitle(getString(R.string.actionbar_title_detail));
-        }
-
         trailersAdapter = new TrailersAdapter(this);
         trailersRecyclerview.setAdapter(trailersAdapter);
         reviewsAdapter = new ReviewsAdapter(this);
@@ -137,9 +143,14 @@ public class DetailsActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (reviews != null) {
+                    reviewsProgressBar.setVisibility(View.GONE);
+                    if (reviews != null && reviews.size() > 0) {
+                        reviewsHeader.setVisibility(View.VISIBLE);
                         reviewsAdapter.setAdapter(reviews);
                         reviewsAdapter.notifyDataSetChanged();
+                    }
+                    else {
+                        reviewsHeader.setVisibility(View.GONE);
                     }
                 }
             });
@@ -157,9 +168,14 @@ public class DetailsActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (trailers != null) {
+                    trailersProgressBar.setVisibility(View.GONE);
+                    if (trailers != null && trailers.size() > 0) {
+                        trailersHeader.setVisibility(View.VISIBLE);
                         trailersAdapter.setData(trailers);
                         trailersAdapter.notifyDataSetChanged();
+                    }
+                    else {
+                        trailersHeader.setVisibility(View.GONE);
                     }
                 }
             });

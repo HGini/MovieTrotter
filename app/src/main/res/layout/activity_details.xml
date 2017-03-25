@@ -73,7 +73,8 @@
                 android:layout_marginTop="10dp"
                 android:text="120min"
                 android:textSize="20sp"
-                tools:textStyle="italic" />
+                tools:textStyle="italic"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/rating"
@@ -98,7 +99,7 @@
 
         <TextView
             android:id="@+id/trailers_heading"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/synopsis"
             android:layout_marginLeft="20dp"
@@ -106,6 +107,16 @@
             android:layout_marginTop="40dp"
             android:textStyle="bold"
             android:text="Trailers"/>
+
+        <ProgressBar
+            android:id="@+id/trailers_progress"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="42dp"
+            android:layout_below="@+id/synopsis"
+            android:layout_toRightOf="@+id/trailers_heading"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/trailers_recyclerview"
@@ -118,7 +129,7 @@
 
         <TextView
             android:id="@+id/review_heading"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/trailers_recyclerview"
             android:layout_marginLeft="20dp"
@@ -126,6 +137,16 @@
             android:layout_marginTop="20dp"
             android:textStyle="bold"
             android:text="Reviews"/>
+
+        <ProgressBar
+            android:id="@+id/reviews_progress"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="22dp"
+            android:layout_below="@+id/trailers_recyclerview"
+            android:layout_toRightOf="@+id/review_heading"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reviews_recyclerview"
