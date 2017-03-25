@@ -101,11 +101,11 @@ public class DetailsActivity extends AppCompatActivity {
                 titleTextView.setText(movie.getTitle());
             }
             if (!TextUtils.isEmpty(movie.getReleaseDate())) {
-                String[] array = movie.getReleaseDate().split("-");
+                String[] array = movie.getReleaseDate().split(getString(R.string.details_screen_release_date_separator));
                 yearTextView.setText(array[0]);
             }
             if (movie.getVoteAverage() > 0) {
-                String ratings = movie.getVoteAverage() + "/10";
+                String ratings = movie.getVoteAverage() + getString(R.string.details_screen_rating_suffix);
                 ratingsTextView.setText(ratings);
             }
             if (!TextUtils.isEmpty(movie.getOverview())) {
