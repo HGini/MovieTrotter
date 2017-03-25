@@ -1,6 +1,7 @@
 package com.personal.android.movietrotter.interfaces;
 
 import com.personal.android.movietrotter.beans.Movie;
+import com.personal.android.movietrotter.beans.Review;
 import com.personal.android.movietrotter.beans.Trailer;
 
 import java.util.ArrayList;
@@ -13,5 +14,5 @@ public interface MoviesInterface {
 
     void onMoviesAPISuccess(ArrayList<Movie> movies);
     void onMovieTrailersAPISuccess(ArrayList<Trailer> trailers);
-    void onMovieReviewsAPISuccess(ArrayList<String> reviews);
+    void onMovieReviewsAPISuccess(ArrayList<Review> reviews);
 }

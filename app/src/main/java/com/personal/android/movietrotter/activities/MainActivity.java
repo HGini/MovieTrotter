@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.personal.android.movietrotter.beans.Review;
 import com.personal.android.movietrotter.beans.Trailer;
 import com.personal.android.movietrotter.zextras.APIManager;
 import com.personal.android.movietrotter.beans.Movie;
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface{
     }
 
     @Override
-    public void onMovieReviewsAPISuccess(ArrayList<String> reviews) {
+    public void onMovieReviewsAPISuccess(ArrayList<Review> reviews) {
 
     }
 }

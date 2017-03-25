@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.personal.android.movietrotter.R;
 import com.personal.android.movietrotter.beans.Movie;
+import com.personal.android.movietrotter.beans.Review;
 import com.personal.android.movietrotter.beans.Trailer;
 import com.personal.android.movietrotter.interfaces.MoviesInterface;
 import com.squareup.okhttp.Callback;
@@ -31,10 +32,10 @@ public class APIManager {
     private static final String URL_POPULAR_MOVIES = "http://api.themoviedb.org/3/movie/popular?api_key=" + APIKeys.KEY_VER3_AUTH;
     private static final String URL_TOP_RATED_MOVIES = "http://api.themoviedb.org/3/movie/top_rated?api_key=" + APIKeys.KEY_VER3_AUTH;
     public static final String URL_BASE_MOVIE_IMAGE = "http://image.tmdb.org/t/p/w185";
-    public static final String URL_BASE_MOVIE_DETAIL =  "http://api.themoviedb.org/4/movie/";
+    public static final String URL_BASE_MOVIE_DETAIL =  "http://api.themoviedb.org/3/movie/";
     public static final String URL_SUFFIX_MOVIE_DETAIL_TRAILER = "/videos";
     public static final String URL_SUFFIX_MOVIE_DETAIL_REVIEW = "/reviews";
-    public static final String URL_SUFFIX_API_KEY = "?api_key=" + APIKeys.KEY_VER4_READ_ACCESS;
+    public static final String URL_SUFFIX_API_KEY = "?api_key=" + APIKeys.KEY_VER3_AUTH;
     private static final String RESPONSE_JSON_KEY_PAGE = "page";
     private static final String RESPONSE_JSON_KEY_RESULTS = "results";
     private static final String RESPONSE_JSON_KEY_TOTAL_RESULTS = "total_results";
@@ -182,8 +183,8 @@ public class APIManager {
         if (response != null) {
             try {
                 JSONObject body = new JSONObject(response.body().string());
-                if (body.has("results")) {
-                    JSONArray array = body.getJSONArray("results");
+                if (body.has(RESPONSE_JSON_KEY_RESULTS)) {
+                    JSONArray array = body.getJSONArray(RESPONSE_JSON_KEY_RESULTS);
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -197,7 +198,7 @@ public class APIManager {
     public void getMovieReviewsData(final int movieID, final MoviesInterface moviesInterface) {
         if (Utils.isNetworkConnected(context)) {
             Request request = new Request.Builder()
-                    .url(URL_BASE_MOVIE_DETAIL + movieID + URL_SUFFIX_MOVIE_DETAIL_REVIEW)
+                    .url(URL_BASE_MOVIE_DETAIL + movieID + URL_SUFFIX_MOVIE_DETAIL_REVIEW + URL_SUFFIX_API_KEY)
                     .get()
                     .build();
             OkHttpClient okHttpClient = new OkHttpClient();
@@ -221,11 +222,27 @@ public class APIManager {
         }
     }
 
-    private ArrayList<String> parseMovieReviewsData(Response response) {
-        ArrayList<String> reviews = new ArrayList<>();
+    private ArrayList<Review> parseMovieReviewsData(Response response) {
+        ArrayList<Review> reviews = new ArrayList<>();
         if (response != null) {
             try {
                 JSONObject body = new JSONObject(response.body().string());
+                if (body.has(RESPONSE_JSON_KEY_RESULTS)) {
+                    JSONArray array = body.getJSONArray(RESPONSE_JSON_KEY_RESULTS);
+                    for (int i = 0; i < array.length(); i++) {
+                        Review review = new Review();
+                        JSONObject reviewObj = array.getJSONObject(i);
+                        if (reviewObj.has(Review.API_KEY_ID))
+                            review.setId(reviewObj.getString(Review.API_KEY_ID));
+                        if (reviewObj.has(Review.API_KEY_AUTHOR))
+                            review.setAuthor(reviewObj.getString(Review.API_KEY_AUTHOR));
+                        if (reviewObj.has(Review.API_KEY_CONTENT))
+                            review.setContent(reviewObj.getString(Review.API_KEY_CONTENT));
+                        if (reviewObj.has(Review.API_KEY_URL))
+                            review.setUrl(reviewObj.getString(Review.API_KEY_URL));
+                        reviews.add(review);
+                    }
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             } catch (JSONException ex) {

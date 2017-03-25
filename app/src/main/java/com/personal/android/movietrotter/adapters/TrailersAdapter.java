@@ -21,14 +21,14 @@ import java.util.ArrayList;
 
 public class TrailersAdapter extends RecyclerView.Adapter<TrailerViewHolder> implements TrailerViewHolder.OnItemClickedListener{
 
-    private ArrayList<Trailer> trailers;
+    private ArrayList<Trailer> trailers = new ArrayList<>();
     private Context context;
 
     public TrailersAdapter(Context context) {
         this.context = context;
     }
 
-    public void setTrailers(ArrayList<Trailer> trailers) {
+    public void setData(ArrayList<Trailer> trailers) {
         this.trailers = trailers;
     }
 
