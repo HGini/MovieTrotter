@@ -8,4 +8,7 @@
     <item android:id="@+id/sort_by_top_rated"
         android:title="Sort by Top Rated"/>
 
+    <item android:id="@+id/sort_by_fav"
+        android:title="Sort by Favorite"/>
+
 </menu>

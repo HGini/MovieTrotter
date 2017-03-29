@@ -1,5 +1,9 @@
 package com.personal.android.movietrotter.activities;
 
+import android.database.Cursor;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +15,7 @@ import android.view.MenuItem;
 
 import com.personal.android.movietrotter.beans.Review;
 import com.personal.android.movietrotter.beans.Trailer;
+import com.personal.android.movietrotter.data.MoviesDBContract;
 import com.personal.android.movietrotter.zextras.APIManager;
 import com.personal.android.movietrotter.beans.Movie;
 import com.personal.android.movietrotter.adapters.MoviesAdapter;
@@ -19,10 +24,12 @@ import com.personal.android.movietrotter.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MoviesInterface{
+public class MainActivity extends AppCompatActivity implements MoviesInterface, LoaderManager.LoaderCallbacks<Cursor>{
 
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
+
+    private static final int LOADER_ID_FAVORITES = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface{
                 sortByTopRated();
                 return true;
 
+            case R.id.sort_by_fav:
+                sortByFavorite();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -87,6 +98,16 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface{
         apiManager.getTopRatedMoviesData(this);
     }
 
+    private void sortByFavorite() {
+        // Change the action bar title
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.actionbar_title_favorite));
+        }
+
+        // Load from db
+        initLoader();
+    }
+
     @Override
     public void onMoviesAPISuccess(final ArrayList<Movie> movies) {
         runOnUiThread(new Runnable() {
@@ -106,5 +127,67 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface{
     @Override
     public void onMovieReviewsAPISuccess(ArrayList<Review> reviews) {
 
+    }
+
+    private void initLoader() {
+        if (getSupportLoaderManager().getLoader(LOADER_ID_FAVORITES) == null)
+            getSupportLoaderManager().initLoader(LOADER_ID_FAVORITES, null, MainActivity.this);
+        else
+            getSupportLoaderManager().restartLoader(LOADER_ID_FAVORITES, null, MainActivity.this);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+
+            case LOADER_ID_FAVORITES: {
+                return new CursorLoader(this, MoviesDBContract.CONTENT_URI, null, null, null, null);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        switch (loader.getId()) {
+
+            case LOADER_ID_FAVORITES: {
+                if (data != null && data.getCount() > 0) {
+                    adapter.setData(parseCursor(data));
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    private ArrayList<Movie> parseCursor(Cursor data) {
+        ArrayList<Movie> movies = new ArrayList<>();
+        if (data != null) {
+            while (data.moveToNext()) {
+                Movie movie = new Movie();
+                movie.setId(data.getInt(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID)));
+                movie.setVoteCount(data.getInt(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_VOTE_COUNT)));
+                movie.setVoteAverage(data.getDouble(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_VOTE_AVG)));
+                movie.setPopularity(data.getDouble(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_POPULARITY)));
+                movie.setAdult(data.getInt(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_IS_ADULT)) == 1);
+                movie.setVideo(data.getInt(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_IS_VIDEO)) == 1);
+                movie.setPosterPath(data.getString(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_POSTER_PATH)));
+                movie.setOverview(data.getString(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_OVERVIEW)));
+                movie.setReleaseDate(data.getString(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_RELEASE_DATE)));
+                movie.setGenreIDs(data.getString(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_GENRE_IDS)));
+                movie.setOriginalTitle(data.getString(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_ORIGINAL_TITLE)));
+                movie.setOriginalLang(data.getString(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_ORIGINAL_LANG)));
+                movie.setTitle(data.getString(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_TITLE)));
+                movie.setBackdropPath(data.getString(data.getColumnIndex(MoviesDBContract.MoviesEntry.COLUMN_BACKDROP_PATH)));
+                movies.add(movie);
+            }
+        }
+        return movies;
     }
 }

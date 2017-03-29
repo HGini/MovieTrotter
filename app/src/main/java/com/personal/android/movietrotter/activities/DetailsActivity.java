@@ -1,5 +1,6 @@
 package com.personal.android.movietrotter.activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,8 @@ import com.personal.android.movietrotter.adapters.TrailersAdapter;
 import com.personal.android.movietrotter.beans.Movie;
 import com.personal.android.movietrotter.beans.Review;
 import com.personal.android.movietrotter.beans.Trailer;
+import com.personal.android.movietrotter.data.MoviesContentProvider;
+import com.personal.android.movietrotter.data.MoviesDBContract;
 import com.personal.android.movietrotter.interfaces.MoviesInterface;
 import com.personal.android.movietrotter.zextras.APIManager;
 import com.squareup.picasso.Picasso;
@@ -28,7 +31,7 @@ import java.util.ArrayList;
  * Created by Hemangini on 3/20/17.
  */
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final String INTENT_EXTRAS_KEY_MOVIE = "KEY_MOVIE";
 
@@ -93,6 +96,7 @@ public class DetailsActivity extends AppCompatActivity {
                 return false;
             }
         });
+        favoriteButton.setOnClickListener(this);
     }
 
     private void initData() {
@@ -125,6 +129,36 @@ public class DetailsActivity extends AppCompatActivity {
         trailersRecyclerview.setAdapter(trailersAdapter);
         reviewsAdapter = new ReviewsAdapter(this);
         reviewsRecyclerview.setAdapter(reviewsAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.fav_button: {
+                saveMovieInFavDB();
+                break;
+            }
+        }
+    }
+
+    private void saveMovieInFavDB() {
+        ContentValues values = new ContentValues();
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID, movie.getId());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_VOTE_COUNT, movie.getVoteCount());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_VOTE_AVG, movie.getVoteAverage());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_POPULARITY, movie.getPopularity());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_IS_ADULT, movie.isAdult());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_IS_VIDEO, movie.isVideo());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_OVERVIEW, movie.getOverview());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_GENRE_IDS, movie.getGenreIDs());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_ORIGINAL_TITLE, movie.getOriginalTitle());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_ORIGINAL_LANG, movie.getOriginalLang());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_TITLE, movie.getTitle());
+        values.put(MoviesDBContract.MoviesEntry.COLUMN_BACKDROP_PATH, movie.getBackdropPath());
+        getContentResolver().insert(MoviesDBContract.CONTENT_URI, values);
     }
 
     private MoviesInterface reviewsInterface = new MoviesInterface() {

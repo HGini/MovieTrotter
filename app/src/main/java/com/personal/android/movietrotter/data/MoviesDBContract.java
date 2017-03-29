@@ -15,7 +15,7 @@ public final class MoviesDBContract {
     public static final String CONTENT_AUTHORITY = "com.personal.android.movietrotter.provider";
 
     // Tables
-    public static final String TABLE_NAME = "movies";
+    public static final String TABLE_NAME = "fav_movies";
 
     // Content URIs
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
