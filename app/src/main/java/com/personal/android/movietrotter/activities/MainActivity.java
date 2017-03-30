@@ -169,11 +169,6 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
     }
 
     @Override
-    public void onMovieTrailersAPISuccess(ArrayList<Trailer> trailers) {
-
-    }
-
-    @Override
     public void onMovieReviewsAPISuccess(ArrayList<Review> reviews) {
 
     }

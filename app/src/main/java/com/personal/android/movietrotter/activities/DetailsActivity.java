@@ -18,11 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.personal.android.movietrotter.R;
 import com.personal.android.movietrotter.adapters.ReviewsAdapter;
-import com.personal.android.movietrotter.adapters.TrailersAdapter;
 import com.personal.android.movietrotter.beans.Movie;
 import com.personal.android.movietrotter.beans.Review;
-import com.personal.android.movietrotter.beans.Trailer;
-import com.personal.android.movietrotter.data.MoviesContentProvider;
 import com.personal.android.movietrotter.data.MoviesDBContract;
 import com.personal.android.movietrotter.interfaces.MoviesInterface;
 import com.personal.android.movietrotter.zextras.APIManager;
@@ -40,22 +37,17 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     private TextView titleTextView;
     private TextView yearTextView;
-    private TextView durationTextView;
     private TextView ratingsTextView;
     private TextView synopsisTextView;
     private ImageView posterImageView;
     private TextView favoriteButton;
-    private TextView trailersHeader;
     private TextView reviewsHeader;
     private ProgressBar saveFavProgressBar;
     private ProgressBar reviewsProgressBar;
-    private ProgressBar trailersProgressBar;
     private RecyclerView reviewsRecyclerview;
-    private RecyclerView trailersRecyclerview;
 
     private Movie movie;
     private ReviewsAdapter reviewsAdapter;
-    private TrailersAdapter trailersAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,21 +69,11 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     private void initViews() {
         titleTextView = (TextView) findViewById(R.id.movie_title);
         yearTextView = (TextView) findViewById(R.id.year);
-        durationTextView = (TextView) findViewById(R.id.duration);
         ratingsTextView = (TextView) findViewById(R.id.rating);
         synopsisTextView = (TextView) findViewById(R.id.synopsis);
         posterImageView = (ImageView) findViewById(R.id.poster_image);
         favoriteButton = (TextView) findViewById(R.id.fav_button);
         saveFavProgressBar = (ProgressBar) findViewById(R.id.save_fav_progressbar);
-        trailersProgressBar = (ProgressBar) findViewById(R.id.trailers_progress);
-        trailersHeader = (TextView) findViewById(R.id.trailers_heading);
-        trailersRecyclerview = (RecyclerView) findViewById(R.id.trailers_recyclerview);
-        trailersRecyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false){
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
         reviewsProgressBar = (ProgressBar) findViewById(R.id.reviews_progress);
         reviewsHeader = (TextView) findViewById(R.id.review_heading);
         reviewsRecyclerview = (RecyclerView) findViewById(R.id.reviews_recyclerview);
@@ -129,13 +111,10 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             }
             if (movie.getId() > 0) {
                 APIManager apiManager = new APIManager(this);
-                apiManager.getMovieTrailersData(movie.getId(), trailersInterface);
                 apiManager.getMovieReviewsData(movie.getId(), reviewsInterface);
             }
         }
 
-        trailersAdapter = new TrailersAdapter(this);
-        trailersRecyclerview.setAdapter(trailersAdapter);
         reviewsAdapter = new ReviewsAdapter(this);
         reviewsRecyclerview.setAdapter(reviewsAdapter);
     }
@@ -262,11 +241,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         @Override
-        public void onMovieTrailersAPISuccess(ArrayList<Trailer> trailers) {
-
-        }
-
-        @Override
         public void onMovieReviewsAPISuccess(final ArrayList<Review> reviews) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -282,36 +256,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
             });
-        }
-    };
-
-    private MoviesInterface trailersInterface = new MoviesInterface() {
-        @Override
-        public void onMoviesAPISuccess(ArrayList<Movie> movies) {
-
-        }
-
-        @Override
-        public void onMovieTrailersAPISuccess(final ArrayList<Trailer> trailers) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    trailersProgressBar.setVisibility(View.GONE);
-                    if (trailers != null && trailers.size() > 0) {
-                        trailersHeader.setVisibility(View.VISIBLE);
-                        trailersAdapter.setData(trailers);
-                        trailersAdapter.notifyDataSetChanged();
-                    }
-                    else {
-                        trailersHeader.setVisibility(View.GONE);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void onMovieReviewsAPISuccess(ArrayList<Review> reviews) {
-
         }
     };
 }

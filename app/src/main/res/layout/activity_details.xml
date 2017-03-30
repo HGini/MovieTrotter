@@ -13,9 +13,9 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="wrap_content"
             android:background="#358e74"
-            android:minHeight="?attr/actionBarSize"
+            android:minHeight="90dp"
             android:theme="?attr/actionBarTheme" />
 
         <TextView
@@ -63,30 +63,21 @@
                 android:id="@+id/year"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_marginTop="50dp"
                 android:text="2017"
                 android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="120min"
-                android:textSize="20sp"
-                android:visibility="gone"
-                tools:textStyle="italic" />
 
             <TextView
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="20dp"
                 android:text="7.1/10" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp">
+                android:layout_marginTop="40dp">
 
                 <TextView
                     android:id="@+id/fav_button"
@@ -116,43 +107,13 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/trailers_heading"
+            android:id="@+id/review_heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/synopsis"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
-            android:text="Trailers"
-            android:textStyle="bold" />
-
-        <ProgressBar
-            android:id="@+id/trailers_progress"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_below="@+id/synopsis"
-            android:layout_marginLeft="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="42dp"
-            android:layout_toRightOf="@+id/trailers_heading" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/trailers_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/trailers_heading"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:padding="10dp"></android.support.v7.widget.RecyclerView>
-
-        <TextView
-            android:id="@+id/review_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/trailers_recyclerview"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
             android:text="Reviews"
             android:textStyle="bold" />
 
@@ -160,10 +121,10 @@
             android:id="@+id/reviews_progress"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            android:layout_below="@+id/trailers_recyclerview"
+            android:layout_below="@+id/synopsis"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="42dp"
             android:layout_toRightOf="@+id/review_heading" />
 
         <android.support.v7.widget.RecyclerView

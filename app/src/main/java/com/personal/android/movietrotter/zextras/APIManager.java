@@ -33,13 +33,9 @@ public class APIManager {
     private static final String URL_TOP_RATED_MOVIES = "http://api.themoviedb.org/3/movie/top_rated?api_key=" + APIKeys.KEY_VER3_AUTH;
     public static final String URL_BASE_MOVIE_IMAGE = "http://image.tmdb.org/t/p/w185";
     public static final String URL_BASE_MOVIE_DETAIL =  "http://api.themoviedb.org/3/movie/";
-    public static final String URL_SUFFIX_MOVIE_DETAIL_TRAILER = "/videos";
     public static final String URL_SUFFIX_MOVIE_DETAIL_REVIEW = "/reviews";
     public static final String URL_SUFFIX_API_KEY = "?api_key=" + APIKeys.KEY_VER3_AUTH;
-    private static final String RESPONSE_JSON_KEY_PAGE = "page";
     private static final String RESPONSE_JSON_KEY_RESULTS = "results";
-    private static final String RESPONSE_JSON_KEY_TOTAL_RESULTS = "total_results";
-    private static final String RESPONSE_JSON_KEY_TOTAL_PAGES = "total_pages";
 
     // Others
     private Context context;
@@ -149,58 +145,6 @@ public class APIManager {
             }
         }
         return movies;
-    }
-
-    public void getMovieTrailersData(final int movieID, final MoviesInterface moviesInterface) {
-        if (Utils.isNetworkConnected(context)) {
-            Request request = new Request.Builder()
-                    .url(URL_BASE_MOVIE_DETAIL + movieID + URL_SUFFIX_MOVIE_DETAIL_TRAILER + URL_SUFFIX_API_KEY)
-                    .get()
-                    .build();
-            OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-                    Log.e(TAG, "getPopularMoviesData: onFailure");
-                }
-
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    Log.v(TAG, "getPopularMoviesData: onResponse");
-                    moviesInterface.onMovieTrailersAPISuccess(parseMovieTrailersData(response));
-                }
-            });
-
-        }
-        else {
-            Toast.makeText(context, context.getString(R.string.no_network_pull_down_refresh),
-                    Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private ArrayList<Trailer> parseMovieTrailersData(Response response) {
-        ArrayList<Trailer> trailers = new ArrayList<>();
-        if (response != null) {
-            try {
-                JSONObject body = new JSONObject(response.body().string());
-                if (body.has(RESPONSE_JSON_KEY_RESULTS)) {
-                    JSONArray array = body.getJSONArray(RESPONSE_JSON_KEY_RESULTS);
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject jsonObject = array.getJSONObject(i);
-                        Trailer trailer = new Trailer();
-                        if (jsonObject.has(Trailer.API_KEY_NAME))
-                            trailer.setName(jsonObject.getString(Trailer.API_KEY_NAME));
-
-                        trailers.add(trailer);
-                    }
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } catch (JSONException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return trailers;
     }
 
     public void getMovieReviewsData(final int movieID, final MoviesInterface moviesInterface) {

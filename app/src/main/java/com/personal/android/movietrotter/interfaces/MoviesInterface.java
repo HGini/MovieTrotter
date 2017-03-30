@@ -13,6 +13,5 @@ import java.util.ArrayList;
 public interface MoviesInterface {
 
     void onMoviesAPISuccess(ArrayList<Movie> movies);
-    void onMovieTrailersAPISuccess(ArrayList<Trailer> trailers);
     void onMovieReviewsAPISuccess(ArrayList<Review> reviews);
 }
