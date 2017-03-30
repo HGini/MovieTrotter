@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
 
     private static final int LOADER_ID_FAVORITES = 0;
 
+    private static final String BUNDLE_KEY_SORT_MODE = "key_sort_mode";
+
     private static final int SORT_MODE_POPULARITY = 0;
     private static final int SORT_MODE_TOP_RATED = 1;
     private static final int SORT_MODE_FAVORITES = 2;
@@ -38,12 +40,23 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
     private int sortMode = SORT_MODE_POPULARITY;
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(BUNDLE_KEY_SORT_MODE, sortMode);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
 
-        sortByPopularity();
+        if (savedInstanceState != null) {
+            sortMode = savedInstanceState.getInt(BUNDLE_KEY_SORT_MODE);
+        } else {
+            sortMode = SORT_MODE_POPULARITY;
+        }
+        sortByMode();
     }
 
     private void initViews() {
@@ -95,6 +108,26 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void sortByMode() {
+        switch (sortMode) {
+
+            case SORT_MODE_POPULARITY: {
+                sortByPopularity();
+                break;
+            }
+
+            case SORT_MODE_TOP_RATED: {
+                sortByTopRated();
+                break;
+            }
+
+            case SORT_MODE_FAVORITES: {
+                sortByFavorite();
+                break;
+            }
         }
     }
 
