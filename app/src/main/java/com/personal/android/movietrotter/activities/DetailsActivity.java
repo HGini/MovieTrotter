@@ -2,6 +2,9 @@ package com.personal.android.movietrotter.activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +47,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     private TextView favoriteButton;
     private TextView trailersHeader;
     private TextView reviewsHeader;
+    private ProgressBar saveFavProgressBar;
     private ProgressBar reviewsProgressBar;
     private ProgressBar trailersProgressBar;
     private RecyclerView reviewsRecyclerview;
@@ -78,6 +82,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         synopsisTextView = (TextView) findViewById(R.id.synopsis);
         posterImageView = (ImageView) findViewById(R.id.poster_image);
         favoriteButton = (TextView) findViewById(R.id.fav_button);
+        saveFavProgressBar = (ProgressBar) findViewById(R.id.save_fav_progressbar);
         trailersProgressBar = (ProgressBar) findViewById(R.id.trailers_progress);
         trailersHeader = (TextView) findViewById(R.id.trailers_heading);
         trailersRecyclerview = (RecyclerView) findViewById(R.id.trailers_recyclerview);
@@ -97,6 +102,10 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         favoriteButton.setOnClickListener(this);
+        if (isFavorite()) {
+            favoriteButton.setAlpha(0.7f);
+            favoriteButton.setText(getString(R.string.unfavorite_action_string));
+        }
     }
 
     private void initData() {
@@ -136,29 +145,114 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
 
             case R.id.fav_button: {
-                saveMovieInFavDB();
+                favOrUnfavMovie();
                 break;
             }
         }
     }
 
+    /**
+     * This method finds out if this movie has been favorited by the user
+     * @return
+     */
+    private boolean isFavorite() {
+        boolean isFavorite = false;
+        String selection = MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID + " = ? ";
+        String[] selectionArgs = new String[]{String.valueOf(movie.getId())};
+        Cursor cursor = getContentResolver().query(MoviesDBContract.CONTENT_URI, null, selection, selectionArgs, null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) isFavorite = true;
+            cursor.close();
+        }
+
+        return isFavorite;
+    }
+
+    /**
+     * This method executes UI change & db change when user favorites/un-favorites the movie
+     */
+    private void favOrUnfavMovie() {
+        if (favoriteButton.getAlpha() == 1.0f) {
+            // Favorite it
+            saveMovieInFavDB();
+        }
+        else {
+            // Un-favorite it
+            removeMovieFromDB();
+        }
+    }
+
     private void saveMovieInFavDB() {
-        ContentValues values = new ContentValues();
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID, movie.getId());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_VOTE_COUNT, movie.getVoteCount());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_VOTE_AVG, movie.getVoteAverage());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_POPULARITY, movie.getPopularity());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_IS_ADULT, movie.isAdult());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_IS_VIDEO, movie.isVideo());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_OVERVIEW, movie.getOverview());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_GENRE_IDS, movie.getGenreIDs());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_ORIGINAL_TITLE, movie.getOriginalTitle());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_ORIGINAL_LANG, movie.getOriginalLang());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_TITLE, movie.getTitle());
-        values.put(MoviesDBContract.MoviesEntry.COLUMN_BACKDROP_PATH, movie.getBackdropPath());
-        getContentResolver().insert(MoviesDBContract.CONTENT_URI, values);
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                favoriteButton.setEnabled(false);
+                saveFavProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                ContentValues values = new ContentValues();
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID, movie.getId());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_VOTE_COUNT, movie.getVoteCount());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_VOTE_AVG, movie.getVoteAverage());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_POPULARITY, movie.getPopularity());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_IS_ADULT, movie.isAdult());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_IS_VIDEO, movie.isVideo());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_OVERVIEW, movie.getOverview());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_GENRE_IDS, movie.getGenreIDs());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_ORIGINAL_TITLE, movie.getOriginalTitle());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_ORIGINAL_LANG, movie.getOriginalLang());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_TITLE, movie.getTitle());
+                values.put(MoviesDBContract.MoviesEntry.COLUMN_BACKDROP_PATH, movie.getBackdropPath());
+                getContentResolver().insert(MoviesDBContract.CONTENT_URI, values);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                favoriteButton.setEnabled(true);
+                favoriteButton.setAlpha(0.7f);
+                favoriteButton.setText(getString(R.string.unfavorite_action_string));
+                saveFavProgressBar.setVisibility(View.GONE);
+            }
+        }.execute();
+    }
+
+    private void removeMovieFromDB() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                favoriteButton.setEnabled(false);
+                saveFavProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                int movieID = movie.getId();
+                String selection = MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID + " = ? ";
+                String[] selectionArgs = new String[]{String.valueOf(movieID)};
+                getContentResolver().delete(MoviesDBContract.CONTENT_URI, selection, selectionArgs);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                favoriteButton.setEnabled(true);
+                favoriteButton.setAlpha(1.0f);
+                favoriteButton.setText(getString(R.string.favorite_action_string));
+                saveFavProgressBar.setVisibility(View.GONE);
+            }
+
+        }.execute();
     }
 
     private MoviesInterface reviewsInterface = new MoviesInterface() {

@@ -7,4 +7,6 @@
     <string name="no_network_pull_down_refresh">No internet connection. Please reconnect and pull down to refresh.</string>
     <string name="details_screen_rating_suffix">/10</string>
     <string name="details_screen_release_date_separator">-</string>
+    <string name="favorite_action_string">MARK AS FAVORITE</string>
+    <string name="unfavorite_action_string">REMOVE AS FAVORITE</string>
 </resources>

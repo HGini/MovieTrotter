@@ -16,7 +16,6 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_MAIN = "CREATE TABLE " + MoviesDBContract.TABLE_NAME +
             " (" +
-            MoviesDBContract.MoviesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
             MoviesDBContract.MoviesEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
             MoviesDBContract.MoviesEntry.COLUMN_GENRE_IDS + " TEXT NOT NULL, " +

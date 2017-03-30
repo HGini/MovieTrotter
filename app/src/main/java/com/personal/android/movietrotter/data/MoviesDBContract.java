@@ -28,7 +28,7 @@ public final class MoviesDBContract {
             CONTENT_AUTHORITY + "/" + TABLE_NAME;
 
 
-    public static final class MoviesEntry implements BaseColumns {
+    public static final class MoviesEntry {
 
         public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_VOTE_COUNT = "vote_count";
@@ -49,5 +49,12 @@ public final class MoviesDBContract {
     // Method to build Uri when a row is inserted (NOTE: The Uri points to the inserted row)
     public static Uri buildUriForID(long id) {
         return ContentUris.withAppendedId(CONTENT_URI, id);
+    }
+
+    public static int parseId(Uri uri) {
+        if (uri != null)
+            return Integer.valueOf(uri.getLastPathSegment());
+        else
+            return -1;
     }
 }

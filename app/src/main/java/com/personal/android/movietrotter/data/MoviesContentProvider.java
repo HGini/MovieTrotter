@@ -86,14 +86,12 @@ public class MoviesContentProvider extends ContentProvider {
 
             case URI_MATCH_TABLE: {
                 rowsDeleted = db.delete(MoviesDBContract.TABLE_NAME, selection, selectionArgs);
-                db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + MoviesDBContract.TABLE_NAME + "'");
                 break;
             }
 
             case URI_MATCH_TABLE_ITEM: {
-                rowsDeleted = db.delete(MoviesDBContract.TABLE_NAME, MoviesDBContract.MoviesEntry._ID +
-                        " ? ", new String[]{String.valueOf(ContentUris.parseId(uri))});
-                db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + MoviesDBContract.TABLE_NAME + "'");
+                rowsDeleted = db.delete(MoviesDBContract.TABLE_NAME, MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID +
+                        " ? ", new String[]{String.valueOf(MoviesDBContract.parseId(uri))});
                 break;
             }
 
@@ -122,8 +120,8 @@ public class MoviesContentProvider extends ContentProvider {
             }
 
             case URI_MATCH_TABLE_ITEM: {
-                rowsUpdated = db.update(MoviesDBContract.TABLE_NAME, values, MoviesDBContract.MoviesEntry._ID + " ? ",
-                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                rowsUpdated = db.update(MoviesDBContract.TABLE_NAME, values, MoviesDBContract.MoviesEntry.COLUMN_MOVIE_ID + " ? ",
+                        new String[]{String.valueOf(MoviesDBContract.parseId(uri))});
                 break;
             }
 

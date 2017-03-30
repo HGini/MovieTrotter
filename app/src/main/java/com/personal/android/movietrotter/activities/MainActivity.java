@@ -26,10 +26,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MoviesInterface, LoaderManager.LoaderCallbacks<Cursor>{
 
+    private static final int LOADER_ID_FAVORITES = 0;
+
+    private static final int SORT_MODE_POPULARITY = 0;
+    private static final int SORT_MODE_TOP_RATED = 1;
+    private static final int SORT_MODE_FAVORITES = 2;
+
+    private Menu menu;
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
-
-    private static final int LOADER_ID_FAVORITES = 0;
+    private int sortMode = SORT_MODE_POPULARITY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +54,25 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        /**
+         * Check if any favorites exist in db.
+         * If yes, show menu option 'Sort by Favorites' and refresh the screen if sorted by favorites,
+         * else, hide menu option 'Sort by Favorites' and sort by popularity (if sorted by favorites) */
+        if (isFavoritesTableEmpty()) {
+            disableSortByFavorites();
+        } else {
+            enableSortByFavorites();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.settings, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -77,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
     }
 
     private void sortByPopularity() {
+        // Set the sort mode
+        sortMode = SORT_MODE_POPULARITY;
+
         // Change the action bar title
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.actionbar_title_pop));
@@ -88,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
     }
 
     private void sortByTopRated() {
+        // Set the sort mode
+        sortMode = SORT_MODE_TOP_RATED;
+
         // Change the action bar title
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.actionbar_title_top_rated));
@@ -99,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
     }
 
     private void sortByFavorite() {
+        // Set the sort mode
+        sortMode = SORT_MODE_FAVORITES;
+
         // Change the action bar title
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.actionbar_title_favorite));
@@ -106,6 +137,24 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
 
         // Load from db
         initLoader();
+    }
+
+    private void disableSortByFavorites() {
+        if (menu != null) {
+            menu.findItem(R.id.sort_by_fav).setVisible(false);
+            if (sortMode == SORT_MODE_FAVORITES) {
+                sortByPopularity();
+            }
+        }
+    }
+
+    private void enableSortByFavorites() {
+        if (menu != null) {
+            menu.findItem(R.id.sort_by_fav).setVisible(true);
+            if (sortMode == SORT_MODE_FAVORITES) {
+                sortByFavorite();
+            }
+        }
     }
 
     @Override
@@ -189,5 +238,16 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
             }
         }
         return movies;
+    }
+
+    private boolean isFavoritesTableEmpty() {
+        boolean isEmpty = true;
+        Cursor cursor = getContentResolver().query(MoviesDBContract.CONTENT_URI, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) isEmpty = false;
+            cursor.close();
+        }
+
+        return isEmpty;
     }
 }
