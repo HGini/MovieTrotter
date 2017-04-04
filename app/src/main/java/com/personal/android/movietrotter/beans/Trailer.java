@@ -12,6 +12,7 @@ public class Trailer {
 
     public static final String API_KEY_ID = "id";
     public static final String API_KEY_NAME = "name";
+    public static final String API_KEY_VIDEO_KEY = "key";
 
     public String getId() {
         return id;

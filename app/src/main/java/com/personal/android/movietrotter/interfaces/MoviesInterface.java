@@ -14,4 +14,5 @@ public interface MoviesInterface {
 
     void onMoviesAPISuccess(ArrayList<Movie> movies);
     void onMovieReviewsAPISuccess(ArrayList<Review> reviews);
+    void onMovieTrailersAPISuccess(ArrayList<Trailer> trailers);
 }

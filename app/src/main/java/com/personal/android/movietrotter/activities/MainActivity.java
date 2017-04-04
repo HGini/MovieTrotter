@@ -206,6 +206,11 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
 
     }
 
+    @Override
+    public void onMovieTrailersAPISuccess(ArrayList<Trailer> trailers) {
+
+    }
+
     private void initLoader() {
         if (getSupportLoaderManager().getLoader(LOADER_ID_FAVORITES) == null)
             getSupportLoaderManager().initLoader(LOADER_ID_FAVORITES, null, MainActivity.this);
