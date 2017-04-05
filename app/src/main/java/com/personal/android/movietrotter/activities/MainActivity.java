@@ -24,24 +24,30 @@ import com.personal.android.movietrotter.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MoviesInterface, LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity implements MoviesInterface,
+        LoaderManager.LoaderCallbacks<Cursor>, MoviesAdapter.ParentInterface {
 
     private static final int LOADER_ID_FAVORITES = 0;
 
     private static final String BUNDLE_KEY_SORT_MODE = "key_sort_mode";
+    private static final String BUNDLE_KEY_FOCUSSED_ITEM_POS = "focussed_item_pos";
 
     private static final int SORT_MODE_POPULARITY = 0;
     private static final int SORT_MODE_TOP_RATED = 1;
     private static final int SORT_MODE_FAVORITES = 2;
 
+    private static final int INVALID_POSITION = -1;
+
     private Menu menu;
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private int sortMode = SORT_MODE_POPULARITY;
+    private int focussedItemPos = INVALID_POSITION;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(BUNDLE_KEY_SORT_MODE, sortMode);
+        outState.putInt(BUNDLE_KEY_FOCUSSED_ITEM_POS, focussedItemPos);
         super.onSaveInstanceState(outState);
     }
 
@@ -52,16 +58,17 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
         initViews();
 
         if (savedInstanceState != null) {
-            sortMode = savedInstanceState.getInt(BUNDLE_KEY_SORT_MODE);
-        } else {
-            sortMode = SORT_MODE_POPULARITY;
+            if (savedInstanceState.containsKey(BUNDLE_KEY_SORT_MODE))
+                sortMode = savedInstanceState.getInt(BUNDLE_KEY_SORT_MODE);
+            if (savedInstanceState.containsKey(BUNDLE_KEY_FOCUSSED_ITEM_POS))
+                focussedItemPos = savedInstanceState.getInt(BUNDLE_KEY_FOCUSSED_ITEM_POS);
         }
         sortByMode();
     }
 
     private void initViews() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        adapter = new MoviesAdapter(MainActivity.this);
+        adapter = new MoviesAdapter(MainActivity.this, MainActivity.this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
     }
@@ -197,6 +204,9 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
             public void run() {
                 adapter.setData(movies);
                 adapter.notifyDataSetChanged();
+
+                if (focussedItemPos != INVALID_POSITION)
+                    recyclerView.smoothScrollToPosition(focussedItemPos);
             }
         });
     }
@@ -237,6 +247,9 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
                 if (data != null && data.getCount() > 0) {
                     adapter.setData(parseCursor(data));
                     adapter.notifyDataSetChanged();
+
+                    if (focussedItemPos != INVALID_POSITION)
+                        recyclerView.smoothScrollToPosition(focussedItemPos);
                 }
                 break;
             }
@@ -282,5 +295,10 @@ public class MainActivity extends AppCompatActivity implements MoviesInterface, 
         }
 
         return isEmpty;
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        focussedItemPos = position;
     }
 }

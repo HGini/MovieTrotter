@@ -23,10 +23,12 @@ import java.util.ArrayList;
 public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> implements BaseViewHolder.OnItemClickedListener{
 
     private Context context;
+    private ParentInterface parentInterface;
     private ArrayList<Movie> movies = new ArrayList<>();
 
-    public MoviesAdapter(Context context) {
+    public MoviesAdapter(Context context, ParentInterface parentInterface) {
         this.context = context;
+        this.parentInterface = parentInterface;
     }
 
     public void setData(ArrayList<Movie> movies) {
@@ -52,6 +54,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> impleme
 
     @Override
     public void onItemClicked(int position) {
+        if (parentInterface != null)
+            parentInterface.onItemClicked(position);
+
         Movie movie = movies.get(position);
         openMovieDetailsActivity(movie);
     }
@@ -60,5 +65,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> impleme
         Intent intent = new Intent(context, DetailsActivity.class);
         intent.putExtra(DetailsActivity.INTENT_EXTRAS_KEY_MOVIE, movie);
         context.startActivity(intent);
+    }
+
+    public interface ParentInterface {
+        void onItemClicked(int position);
     }
 }
