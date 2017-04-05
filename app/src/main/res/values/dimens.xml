@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Main Activity -->
+    <dimen name="grid_item_width">250dp</dimen>
+    <dimen name="grid_item_height">300dp</dimen>
+
+    <!-- Details Activity -->
+    <dimen name="details_toolbar_min_height">90dp</dimen>
+    <dimen name="details_title_margin_left">33dp</dimen>
+    <dimen name="details_title_margin_top">24dp</dimen>
+    <dimen name="details_title_text_size">25sp</dimen>
+    <dimen name="details_poster_width">170dp</dimen>
+    <dimen name="details_poster_height">220dp</dimen>
+    <dimen name="details_margin_left">22dp</dimen>
+    <dimen name="details_margin_top">20dp</dimen>
+    <dimen name="details_synopsis_margin_top">30dp</dimen>
+    <dimen name="details_info_height">220dp</dimen>
+    <dimen name="details_info_margin_left">40dp</dimen>
+    <dimen name="details_info_margin_top">20dp</dimen>
+    <dimen name="details_info_year_height">30dp</dimen>
+    <dimen name="details_info_year_margin_top">50dp</dimen>
+    <dimen name="details_info_year_text_size">25sp</dimen>
+    <dimen name="details_info_rating_margin_top">20dp</dimen>
+    <dimen name="details_fav_margin_top">40dp</dimen>
+    <dimen name="details_fav_button_max_height">60dp</dimen>
+    <dimen name="details_fav_button_max_width">100dp</dimen>
+    <dimen name="details_fav_button_padding">8dp</dimen>
+    <dimen name="details_fav_button_text_size">11sp</dimen>
+    <dimen name="details_fav_progress_size">20dp</dimen>
+    <dimen name="details_trailers_header_margin_left">20dp</dimen>
+    <dimen name="details_trailers_header_margin_top">40dp</dimen>
+    <dimen name="details_trailers_progress_bar_size">12dp</dimen>
+    <dimen name="details_trailers_progress_bar_margin_left">12dp</dimen>
+    <dimen name="details_trailers_progress_bar_margin_top">42dp</dimen>
+    <dimen name="details_trailers_rv_margin_left">15dp</dimen>
+    <dimen name="details_trailers_rv_margin_top">20dp</dimen>
+    <dimen name="reviews_item_author_padding">16dp</dimen>
+    <dimen name="reviews_item_author_text_size">12sp</dimen>
+    <dimen name="reviews_item_content_margin_top">8dp</dimen>
+    <dimen name="reviews_item_content_text_size">14sp</dimen>
+    <dimen name="reviews_item_separator_height">8dp</dimen>
+    <dimen name="trailers_item_height">40dp</dimen>
+    <dimen name="trailers_item_margin_bottom">10dp</dimen>
+    <dimen name="trailers_item_margin_left">16dp</dimen>
+    <dimen name="trailers_title_margin_left">20dp</dimen>
+    <dimen name="trailers_title_text_size">12sp</dimen>
+    <dimen name="trailers_play_button_width">40dp</dimen>
+    <dimen name="trailers_play_button_padding">12dp</dimen>
+    <dimen name="trailers_play_button_margin">20dp</dimen>
+
+</resources>
