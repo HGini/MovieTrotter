@@ -7,4 +7,4 @@
 /build
 /captures
 .externalNativeBuild
-/app/src/main/java/com/personal/android/movietrotter/APIKeys.java
+/app/src/main/java/com/personal/android/movietrotter/zextras/APIKeys.java
